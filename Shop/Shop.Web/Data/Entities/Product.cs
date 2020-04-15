@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Shop.Web.Data.Entities
 {
-    public class Product
+    public class Product : IEntity
     {
 		public int Id { get; set; }
 
@@ -15,8 +15,7 @@ namespace Shop.Web.Data.Entities
 		[Required]
 		public string Name { get; set; }
 
-		[DisplayFormat(ApplyFormatInEditMode = false)]
-		[Column(TypeName = "decimal(18, 2)")]
+		[DisplayFormat(DataFormatString = "{0:C}")]
 		public decimal Price { get; set; }
 
 		[Display(Name = "Image")]
@@ -33,6 +32,8 @@ namespace Shop.Web.Data.Entities
 
 		[DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = false)]
 		public double Stock { get; set; }
+
+		public User User { get; set; }
 
 	}
 }
