@@ -31,13 +31,16 @@ namespace Shop.Web
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+            });           
 
             services.AddDbContext<DataContext>(cfg =>
             {
                 cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddTransient<SeedDb>();// AddTransient Ciclo de vida mas corto
+
+            services.AddScoped<IRepository, Repository>(); //AddScoped queda permanente durante toda la ejecucioin
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
