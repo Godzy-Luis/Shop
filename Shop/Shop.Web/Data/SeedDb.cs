@@ -15,7 +15,9 @@ namespace Shop.Web.Data
 
         public IUserHelper UserHelper { get; }
 
-        public SeedDb(DataContext context, IUserHelper userHelper)
+        public SeedDb(
+            DataContext context, 
+            IUserHelper userHelper)
         {
             this.context = context;
             UserHelper = userHelper;
@@ -26,6 +28,10 @@ namespace Shop.Web.Data
         {
             await this.context.Database.EnsureCreatedAsync();
 
+            await this.UserHelper.CheckRoleAsync("Admin");
+            await this.UserHelper.CheckRoleAsync("Customer");
+
+            //Add User
             var user = await this.UserHelper.GetUserByEmailAsync("ing.luisenriquemtz93@gmail.com");
             if (user == null)
             {
@@ -43,8 +49,16 @@ namespace Shop.Web.Data
                 {
                     throw new InvalidOperationException("Could not create the user in seeder");
                 }
+                await this.UserHelper.AddUserToRoleAsync(user, "Admin");
             }
 
+            var isInRole = await this.UserHelper.IsUserInRoleAsync(user, "Admin");
+            if (!isInRole)
+            {
+                await this.UserHelper.AddUserToRoleAsync(user, "Admin");
+            }
+
+            //Add Product
             if (!this.context.Products.Any())
             {
                 this.AddProduct("First Product", user);

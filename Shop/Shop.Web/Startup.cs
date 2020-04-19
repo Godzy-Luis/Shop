@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Shop.Web.Data;
 using Shop.Web.Data.Entities;
+using Shop.Web.Data.Repository;
 using Shop.Web.Helpers;
 
 namespace Shop.Web
@@ -63,7 +64,14 @@ namespace Shop.Web
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
-            });           
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/NotAuthorized";
+                options.AccessDeniedPath = "/Account/NotAuthorized";
+            });
+
 
             services.AddDbContext<DataContext>(cfg =>
             {
@@ -73,6 +81,7 @@ namespace Shop.Web
             services.AddTransient<SeedDb>();// AddTransient Ciclo de vida mas corto
             services.AddScoped<IProductRepository, ProductRepository>(); //AddScoped queda permanente durante toda la ejecucioin
             services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>(); //OrderRepository
             services.AddScoped<IUserHelper, UserHelper>(); //Para correr las interfases y las clases
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -90,6 +99,7 @@ namespace Shop.Web
                 app.UseHsts();
             }
 
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
