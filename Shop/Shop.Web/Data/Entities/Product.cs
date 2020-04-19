@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Shop.Web.Data.Entities
 {
-    public class Product : IEntity
-    {
+	public class Product : IEntity
+	{
 		public int Id { get; set; }
 
 		[MaxLength(50, ErrorMessage = "The field {0} only can contain a maximum {1} characters")]
@@ -35,9 +31,9 @@ namespace Shop.Web.Data.Entities
 
 		public User User { get; set; }
 
-		public string ImageFullPath 
+		public string ImageFullPath
 		{
-			get 
+			get
 			{
 				if (string.IsNullOrEmpty(this.ImageUrl))
 				{

@@ -12,7 +12,7 @@
             BindingContext="{Binding Products}"
             Padding="8">
             <ListView
-                IsRefreshing="{Binding IsRefreshing}}"
+                IsRefreshing="{Binding IsRefreshing}"
             	HasUnevenRows="True"
             	ItemsSource="{Binding Products}">
                 <ListView.ItemTemplate>
